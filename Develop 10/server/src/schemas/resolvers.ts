@@ -33,4 +33,17 @@ interface Context {
           return { token, user };
         },
 
-        
+        login: async (_: any, { email, password }: { email: string; password: string }) => {
+            const user = await User.findOne({ email });
+            if (!user) {
+              throw new AuthenticationError('Incorrect credentials');
+            }
+      
+            const correctPw = await user.isCorrectPassword(password);
+            if (!correctPw) {
+              throw new AuthenticationError('Incorrect credentials');
+            }
+      
+            const token = signToken(user);
+            return { token, user };
+          },
