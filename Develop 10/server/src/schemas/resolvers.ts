@@ -59,4 +59,15 @@ interface Context {
             throw new AuthenticationError('You need to be logged in!');
           },
 
-          
+          removeBook: async (_: any, { bookId }: { bookId: string }, context: Context) => {
+            if (context.user) {
+              return await User.findByIdAndUpdate(
+                context.user._id,
+                { $pull: { savedBooks: { bookId } } },
+                { new: true }
+              );
+            }
+            throw new AuthenticationError('You need to be logged in!');
+          },
+        },
+      };
