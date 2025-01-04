@@ -47,3 +47,16 @@ interface Context {
             const token = signToken(user);
             return { token, user };
           },
+
+          saveBook: async (_: any, { bookData }: { bookData: BookInput }, context: Context) => {
+            if (context.user) {
+              return await User.findByIdAndUpdate(
+                context.user._id,
+                { $addToSet: { savedBooks: bookData } },
+                { new: true, runValidators: true }
+              );
+            }
+            throw new AuthenticationError('You need to be logged in!');
+          },
+
+          
