@@ -26,4 +26,11 @@ interface Context {
       },
     },
 
-    
+    Mutation: {
+        addUser: async (_: any, { username, email, password }: { username: string; email: string; password: string }) => {
+          const user = await User.create({ username, email, password });
+          const token = signToken(user);
+          return { token, user };
+        },
+
+        
